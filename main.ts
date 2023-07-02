@@ -43,7 +43,9 @@ router.get("/image/:page/:count", ctx => {
     if (count > 100) {
         count = 100
     }
-    ctx.response.body = images.slice(page * count, page * count + count);
+    const start = (page - 1) * count
+    const end = start + count
+    ctx.response.body = images.slice(start, end);
 })
 
 // ---------------- ----------------
