@@ -16,7 +16,12 @@ function shuffle(array: unknown[]) {
     return shuffledArray;
 }
 
-const MOCK_IMAGES = shuffle(images2)
+function sort(array: any[]) {
+    const sortedArray = array.slice().sort((a:any, b:any) => a.id - b.id);
+    return sortedArray;
+}
+
+const MOCK_IMAGES = sort(images2)
 
 
 const router = new Router()
