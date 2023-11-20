@@ -3,6 +3,22 @@ import {oakCors} from "https://deno.land/x/cors/mod.ts"
 import images from './data/images.json' assert {type: 'json'}
 import images2 from './data/images2.json' assert {type: 'json'}
 
+
+function shuffle(array: unknown[]) {
+    // 创建一个副本，以防修改原始数组
+    const shuffledArray = array.slice();
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        // 交换元素
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+
+    return shuffledArray;
+}
+
+const MOCK_IMAGES = shuffle(images2)
+
+
 const router = new Router()
 
 // ---------------- ----------------
@@ -37,7 +53,6 @@ router.get("/image/:page/:count", ctx => {
 })
 
 // ---------------------------------
-
 router.get("/images/:page/:size", ctx => {
     ctx.response.type = "json"
     let page = Number(ctx.params.page)
@@ -45,7 +60,7 @@ router.get("/images/:page/:size", ctx => {
     page = Number.isInteger(page) ? page : 0
     size = Number.isInteger(size) ? size : 0
 
-    const total = images2.length
+    const total = MOCK_IMAGES.length
 
     if (page <= 0 || size <= 0) {
         ctx.response.body = {
@@ -57,7 +72,7 @@ router.get("/images/:page/:size", ctx => {
         }
         return
     }
-    const max = Math.ceil(images2.length / size)
+    const max = Math.ceil(MOCK_IMAGES.length / size)
     if (page > max) {
         ctx.response.body = {
             page: page,
@@ -79,7 +94,7 @@ router.get("/images/:page/:size", ctx => {
         max: max,
         size: size,
         total: total,
-        list: images2.slice(start, end)
+        list: MOCK_IMAGES.slice(start, end)
     }
 })
 
