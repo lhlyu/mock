@@ -12,16 +12,10 @@ function shuffle(array: unknown[]) {
         // 交换元素
         [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
-
     return shuffledArray;
 }
 
-function sort(array: any[]) {
-    const sortedArray = array.slice().sort((a:any, b:any) => a.id - b.id);
-    return sortedArray;
-}
-
-const MOCK_IMAGES = sort(images2)
+const MOCK_IMAGES = shuffle(images2)
 
 
 const router = new Router()
