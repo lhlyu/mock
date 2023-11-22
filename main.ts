@@ -100,6 +100,15 @@ router.get("/images/:page/:size", ctx => {
 // ---------------- ----------------
 
 const app = new Application()
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (error) {
+        console.error("异常:", error.message);
+        ctx.response.body = "发生了一个错误！";
+        ctx.response.status = 500;
+    }
+})
 app.use(oakCors({
     origin: '*',
     methods: 'OPTION,GET,HEAD,PUT,PATCH,POST,DELETE'
