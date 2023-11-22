@@ -105,7 +105,7 @@ app.use(async (ctx, next) => {
         await next();
     } catch (error) {
         console.error("异常:", error.message);
-        ctx.response.body = "发生了一个错误！";
+        ctx.response.body = error.message;
         ctx.response.status = 500;
     }
 })
