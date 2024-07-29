@@ -1,8 +1,24 @@
-import {Application, Router} from "https://deno.land/x/oak/mod.ts"
-import {oakCors} from "https://deno.land/x/cors/mod.ts"
-import images from './data/images.json' assert {type: 'json'}
-import images2 from './data/images2.json' assert {type: 'json'}
+import {Application, Router} from "https://deno.land/x/oak/mod.ts";
+import {oakCors} from "https://deno.land/x/cors/mod.ts";
+import images from './data/images.json' assert {type: 'json'};
 
+// 下面第一个代理地址官方不让用，第二个消耗自己的流量扛不住
+// 实在不行自己搭个：https://mirai.mamoe.net/topic/1322/rs-pixiv-%E6%98%93%E4%BA%8E%E6%90%AD%E5%BB%BA%E7%9A%84pixiv%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1
+// const proxy_base_url = "https://proxy.pixivel.moe/" // 不让用
+// const proxy_base_url = 'https://pixiv.tatakai.top/'
+// const proxy_base_url = "https://px.s.rainchan.win/"
+const proxy_base_url = "https://i.pixiv.re/"
+
+const handlerUrl = (url: string): string => {
+    url = url.replace('_p0.', '_p0_master1200.')
+    url = url.replace('.png', '.jpg')
+    return proxy_base_url + 'c/540x540_70/img-master/' + url
+}
+
+const handlerAvatar = (url: string): string => {
+    url = url.replace('.', '_50.')
+    return proxy_base_url + url
+}
 
 function shuffle(array: unknown[]) {
     // 创建一个副本，以防修改原始数组
@@ -15,51 +31,36 @@ function shuffle(array: unknown[]) {
     return shuffledArray;
 }
 
-const MOCK_IMAGES = shuffle(images2)
+function getInteger(val: string | null, def: number): number {
+    if (val === null) {
+        return def;
+    }
+    const v = Number.parseInt(val)
+    if (Number.isNaN(v)) {
+        return def;
+    }
+    return v;
+}
+
+const MOCK_IMAGES: any[] = shuffle(images);
 
 
-const router = new Router()
+const router = new Router();
 
 // ---------------- ----------------
 
 router.get("/", ctx => {
-    ctx.response.body = '一切皆有来处，一切终有归途。我们无从知晓，我们无需害怕，命运自有安排。'
-})
-
-
-// ---------------- ----------------
-router.get("/image/:page/:count", ctx => {
-    ctx.response.type = "json"
-    let page = Number(ctx.params.page)
-    let count = Number(ctx.params.count)
-    page = Number.isInteger(page) ? page : 0
-    count = Number.isInteger(count) ? count : 0
-    if (page <= 0 || count <= 0) {
-        ctx.response.body = []
-        return
-    }
-    const maxPage = Math.ceil(images.length / count)
-    if (page > maxPage) {
-        ctx.response.body = []
-        return
-    }
-    if (count > 100) {
-        count = 100
-    }
-    const start = (page - 1) * count
-    const end = start + count
-    ctx.response.body = images.slice(start, end)
+    ctx.response.body = '一切皆有来处，一切终有归途。我们无从知晓，我们无需害怕，命运自有安排。';
 })
 
 // ---------------------------------
-router.get("/images/:page/:size", ctx => {
-    ctx.response.type = "json"
-    let page = Number(ctx.params.page)
-    let size = Number(ctx.params.size)
-    page = Number.isInteger(page) ? page : 0
-    size = Number.isInteger(size) ? size : 0
-
-    const total = MOCK_IMAGES.length
+router.get("/images", ctx => {
+    ctx.response.type = "json";
+    const page = getInteger(ctx.request.url.searchParams.get('page'), 0);
+    let size = getInteger(ctx.request.url.searchParams.get('size'), 0);
+    // 获取数据的模式：simple | all
+    const mode = ctx.request.url.searchParams.get('mode') ?? 'all';
+    const total = MOCK_IMAGES.length;
 
     if (page <= 0 || size <= 0) {
         ctx.response.body = {
@@ -69,9 +70,9 @@ router.get("/images/:page/:size", ctx => {
             total: total,
             list: []
         }
-        return
+        return;
     }
-    const max = Math.ceil(MOCK_IMAGES.length / size)
+    const max = Math.ceil(MOCK_IMAGES.length / size);
     if (page > max) {
         ctx.response.body = {
             page: page,
@@ -80,20 +81,40 @@ router.get("/images/:page/:size", ctx => {
             total: total,
             list: []
         }
-        return
+        return;
     }
     if (size > 100) {
-        size = 100
+        size = 100;
     }
-    const start = (page - 1) * size
-    const end = start + size
+    const start = (page - 1) * size;
+    const end = start + size;
+
+    let list = [];
+
+    switch (mode) {
+        case 'simple':
+            list = MOCK_IMAGES.slice(start, end).map(value => ({
+                id: value.id,
+                title: value.title,
+                url: handlerUrl(value.url),
+                width: value.width,
+                height: value.height,
+                avatar: handlerAvatar(value.author.avatar),
+                user: value.author.name,
+                views: value.statistic.views
+            }));
+            break;
+        default:
+            list = MOCK_IMAGES.slice(start, end);
+            break;
+    }
 
     ctx.response.body = {
         page: page,
         max: max,
         size: size,
         total: total,
-        list: MOCK_IMAGES.slice(start, end)
+        list: list
     }
 })
 

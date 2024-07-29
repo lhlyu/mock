@@ -4,85 +4,85 @@
 
 ## Api
 
-### 批量获取图片: `/image/:page/:count`
+### 批量获取图片：`/images?page=1&size=1[&mode=<'all' | 'simple'>]`
 
-- 请求示例:
-
-```
-/image/1/2
-```
-
-- 返回结果
-
-```json
-[
-  {
-    "id": "95667953",
-    "height": 4093,
-    "width": 2894,
-    "img": "https://pixiv.yuki.sh/c/540x540_70/img-master/img/2022/01/21/13/12/59/95667953_p0_master1200.jpg"
-  },
-  {
-    "id": "95860473",
-    "height": 3252,
-    "width": 2508,
-    "img": "https://px.s.rainchan.win/c/540x540_70/img-master/img/2022/01/29/22/53/57/95860473_p0_master1200.jpg"
-  }
-]
-```
-
-### 批量获取图片2：`/images/:page/:size`
-
-- 请求示例:
+- 请求示例1:
 
 ```
-/images/1/20
+/images?page=1&size=1
 ```
 
-- 返回结果
+- 返回结果1
 
 ```json5
 {
   "page": 1,
-  "max": 3198,
+  "max": 3189,
   "size": 1,
-  "total": 3198,
+  "total": 3189,
   "list": [
     {
-      "id": 113082486,
-      "title": "「見えて嬉しいものなの？......ふーん、そっか」",
-      "ts": 1698904380000,
-      "width": 800,
-      "height": 1440,
+      "id": 110798120,
+      "title": "お兄さんが格好良すぎてドキドキしてます。",
+      "ts": 1691899200000,
+      "width": 1280,
+      "height": 1920,
       "tags": [
+        "AIart",
         "女の子",
-        "美少女",
-        "girl",
-        "JK",
-        "パンチラ",
-        "女子高生",
-        "片目隠れ",
-        "ショートカット",
-        "制服"
+        "AIイラスト",
+        "ロリ",
+        "制服",
+        "セーラー服"
       ],
       "statistic": {
-        "bookmarks": 114,
-        "likes": 64,
-        "comments": 1,
-        "views": 512
+        "bookmarks": 140,
+        "likes": 78,
+        "comments": 3,
+        "views": 1457
       },
-      "url": "img/2023/11/02/22/53/38/113082486_p0.png",
+      "url": "img/2023/08/13/21/00/04/110798120_p0.png",
       "author": {
-        "id": 3360208,
-        "name": "カムカム",
-        "bio": "普段はASMR音声作品を制作しています。気になった方はTwitterフォローよろしくです。\n\n投稿するイラストはNovelAIちゃんが描いています。\n私は偉そうに指示出すだけのシナリオライターです。",
-        "avatar": "user-profile/img/2022/10/13/01/17/14/23455511_1c7f0662c01d7be794b9b5b6a8e18bd2.png",
-        "background": "background/img/2022/10/13/01/17/12/3360208_85decf2c2d9203d6ae571606502e3459.png"
+        "id": 93897703,
+        "name": "AIしいね",
+        "bio": "2023年5月より、AIイラストはじめました。\nいろいろと試行錯誤中のためクオリティが安定していませんがお許し下さい。\n\nFrom May 2023, I started AI illustration.\nPlease forgive me for not being stable in quality because I am in trial and error.\n\nhttps://lit.link/aishiine",
+        "avatar": "user-profile/img/2023/05/06/10/25/24/24384457_ea7bab0639d071eb25bb7a216d1be04c.png",
+        "background": "background/img/2023/05/07/12/39/30/93897703_2849dbf6a589cb58fafbb0c6265feb55.png"
       }
     }
   ]
 }
 ```
+
+- 请求示例2:
+
+```
+/images?page=1&size=1&mode=simple
+```
+
+- 返回结果2
+
+```json5
+{
+  "page": 1,
+  "max": 3189,
+  "size": 1,
+  "total": 3189,
+  "list": [
+    {
+      "id": 110798120,
+      "title": "お兄さんが格好良すぎてドキドキしてます。",
+      "url": "https://i.pixiv.re/c/540x540_70/img-master/img/2023/08/13/21/00/04/110798120_p0_master1200.jpg",
+      "width": 1280,
+      "height": 1920,
+      "avatar": "https://i.pixiv.re/user-profile/img/2023/05/06/10/25/24/24384457_ea7bab0639d071eb25bb7a216d1be04c_50.png",
+      "user": "AIしいね",
+      "views": 1457
+    }
+  ]
+}
+```
+
 
 - [图片处理参数](https://kidonng.notion.site/pixiv-0c5a8ce110be4913a9cd437f67977f88)
 
