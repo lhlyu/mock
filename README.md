@@ -2,6 +2,14 @@
 
 一切皆有来处，一切终有归途。我们无从知晓，我们无需害怕，命运自有安排。
 
+## 开发
+
+- 本地调试
+
+```
+npx wrangler dev
+```
+
 ## Api
 
 ### 批量获取图片：`/images?page=1&size=1[&mode=<'all' | 'simple'>]`
@@ -85,4 +93,3 @@
 
 
 - [图片处理参数](https://kidonng.notion.site/pixiv-0c5a8ce110be4913a9cd437f67977f88)
-
