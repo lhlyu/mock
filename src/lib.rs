@@ -1,12 +1,21 @@
 use axum::{routing::get, Router};
 use tower_service::Service;
+use tower_http::cors::{CorsLayer, Any};
 use worker::*;
 
 mod api_images;
 use api_images::images_router;
 
 fn router() -> Router {
-    Router::new().route("/", get(root)).merge(images_router())
+    Router::new()
+        .route("/", get(root))
+        .merge(images_router())
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods(Any)
+                .allow_headers(Any)
+        )
 }
 
 #[event(fetch)]
