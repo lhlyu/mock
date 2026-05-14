@@ -1,6 +1,6 @@
 use axum::{routing::get, Router};
+use tower_http::cors::{Any, CorsLayer};
 use tower_service::Service;
-use tower_http::cors::{CorsLayer, Any};
 use worker::*;
 
 mod api_images;
@@ -14,7 +14,7 @@ fn router() -> Router {
             CorsLayer::new()
                 .allow_origin(Any)
                 .allow_methods(Any)
-                .allow_headers(Any)
+                .allow_headers(Any),
         )
 }
 

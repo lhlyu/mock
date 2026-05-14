@@ -2,7 +2,7 @@
 name = "mock"
 version = "0.1.0"
 edition = "2021"
-authors = ["xianyu <xianyu@iiisland.com>"]
+authors = ["lhlyu <lhlyu@yuan.com>"]
 
 [package.metadata.release]
 release = false
